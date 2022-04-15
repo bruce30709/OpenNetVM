@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 function usage {
         echo "Run the example NF in one of the following ways:"
@@ -82,6 +82,13 @@ elif [[ $dash_dash_cnt -eq 1 ]]; then
   exit 1
 fi
 
+service="$(echo "$ONVM_ARGS" | awk -F " " '{print $2;}')"
+sudo mkdir -p "/sys/fs/cgroup/cpu/NF$service"
+
 # don't mess with variable expansion
 # shellcheck disable=SC2086
-exec sudo "$BINARY" $DPDK_ARGS -- $ONVM_ARGS -- "$@"
+exec "$BINARY" $DPDK_ARGS -- $ONVM_ARGS -- "$@" &
+echo $! > "NF$service""_pid".txt
+cgclassify -g cpu::"NF$service" `cat "NF$service""_pid".txt`
+#cgexec -g cpu:"NF$service" "$BINARY" $DPDK_ARGS -- $ONVM_ARGS -- "$@" &
+

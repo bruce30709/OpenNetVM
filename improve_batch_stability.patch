@@ -1,0 +1,43 @@
+diff --git a/onvm/onvm_mgr/main.c b/onvm/onvm_mgr/main.c
+index 4c1bbd5..e8f2091 100644
+--- a/onvm/onvm_mgr/main.c
++++ b/onvm/onvm_mgr/main.c
+@@ -184,6 +184,9 @@ rx_thread_main(void *arg) {
+         struct rte_mbuf *pkts[PACKET_READ_SIZE];
+         struct queue_mgr *rx_mgr = (struct queue_mgr *)arg;
+         cur_lcore = rte_lcore_id();
++        /* new */
++        int flush_threshold = 0;
++        int enable_flush_count = 0;
+ 
+         onvm_stats_gen_event_info("Rx Start", ONVM_EVENT_WITH_CORE, &cur_lcore);
+         RTE_LOG(INFO, APP, "Core %d: Running RX thread for RX queue %d\n", cur_lcore, rx_mgr->id);
+@@ -201,9 +204,15 @@ rx_thread_main(void *arg) {
+                                         onvm_pkt_drop_batch(pkts, rx_count);
+                                 } else {
+                                         onvm_pkt_process_rx_batch(rx_mgr, pkts, rx_count);
++                                        enable_flush_count = 1;
+                                 }
+                         }
+                 }
++                if (enable_flush_count && flush_threshold++ == 10000) {
++                  onvm_pkt_flush_all_nfs(rx_mgr, NULL);
++                  flush_threshold = 0;
++                  enable_flush_count = 0;
++                }
+         }
+ 
+         RTE_LOG(INFO, APP, "Core %d: RX thread done\n", rte_lcore_id());
+diff --git a/onvm/onvm_mgr/onvm_pkt.c b/onvm/onvm_mgr/onvm_pkt.c
+index 9e6076e..143b742 100644
+--- a/onvm/onvm_mgr/onvm_pkt.c
++++ b/onvm/onvm_mgr/onvm_pkt.c
+@@ -93,7 +93,7 @@ onvm_pkt_process_rx_batch(struct queue_mgr *rx_mgr, struct rte_mbuf *pkts[], uin
+                 onvm_pkt_enqueue_nf(rx_mgr, meta->destination, pkts[i], NULL);
+         }
+ 
+-        onvm_pkt_flush_all_nfs(rx_mgr, NULL);
++//        onvm_pkt_flush_all_nfs(rx_mgr, NULL);
+ }
+ 
+ void

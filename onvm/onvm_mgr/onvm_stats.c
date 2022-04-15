@@ -527,6 +527,9 @@ onvm_stats_display_nfs(unsigned difftime, uint8_t verbosity_level) {
                         cJSON_AddNumberToObject(onvm_json_nf_stats[i], "service_id", (int16_t)nfs[i].service_id);
                         cJSON_AddNumberToObject(onvm_json_nf_stats[i], "instance_id",
                                                 (int16_t)nfs[i].instance_id);
+                        cJSON_AddNumberToObject(onvm_json_nf_stats[i], "out", act_out);
+                        cJSON_AddNumberToObject(onvm_json_nf_stats[i], "tonf", act_tonf);
+                        cJSON_AddNumberToObject(onvm_json_nf_stats[i], "drop", act_drop);
                         cJSON_AddNumberToObject(onvm_json_nf_stats[i], "core", (int16_t)nfs[i].thread_info.core);
 
                         free(nf_label);
