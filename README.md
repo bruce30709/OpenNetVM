@@ -1,94 +1,196 @@
-[openNetVM][onvm]
-==
-
-_Please let us know if you use OpenNetVM in your research by [emailing us](mailto:timwood@gwu.edu) or completing this [short survey](https://goo.gl/forms/oxcnGO45Kxq1Zyyi2)._
-
-_Want to get started quickly?_ Try using our NSF CloudLab profile: https://www.cloudlab.us/p/GWCloudLab/onvm
-
-
-Notes
---
-
-We have updated our DPDK submodule to point to a new version, v20.05.  If you have already cloned this repository, please update your DPDK submodule by running:
-
-```
+###### tags: `研究`
+# opennetvm 安裝 及 用法
+:::warning
+需依照 ovnm -> NF -> pktgen 順序執行
+:::
+## onvm
+先調整環境變數
+```bash=
+sudo apt-get install build-essential linux-headers-$(uname -r) git bc
+sudo apt-get install python3
+sudo apt-get install libnuma-dev
+sudo apt-get update
+git clone https://github.com/sdnfv/openNetVM
+cd openNetVM
+git checkout master
 git submodule sync
 git submodule update --init
-```
-
-And then rebuild DPDK using the [install guide][install] or running these commands:
-
-```
+echo export ONVM_HOME=$(pwd) >> ~/.bashrc
 cd dpdk
-make config T=$RTE_TARGET
-make T=$RTE_TARGET -j 8
-make install T=$RTE_TARGET -j 8
+echo export RTE_SDK=$(pwd) >> ~/.bashrc
+echo export RTE_TARGET=x86_64-native-linuxapp-gcc  >> ~/.bashrc
+echo export ONVM_NUM_HUGEPAGES=1024 >> ~/.bashrc
+```
+查詢網卡pci port
+```bash=
+lspci | grep AQC
+```
+填入正確的pci port
+```bash=
+export ONVM_NIC_PCI="xx:xx.x"
+source ~/.bashrc
+sudo sh -c "echo 0 > /proc/sys/kernel/randomize_va_space"
+cd scripts
+./install.sh #會滿久的 完成後確認有無成功綁定網卡在DPDK上
+./setup_environment.sh #可檢查是否綁定成功
+cd ..
+cd onvm
+make
+cd ..
+cd examples
+make
+#如果要跑我程式 要加入下面這行
+sudo chmod -R 777 .
+cd ..
+```
+開啟onvm
+```bash=
+./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
+```
+## NF
+開啟NF指令(以forward為例) & NF所在位置
+```bash=
+cd ~/openNetVM/examples/simple_forward #canlab-worker2
+```
+simple_forward
+```bash=
+./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
+
+sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
+
+```
+busy_forward
+```bash=
+./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
+
+sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數 (pro)
+
+```
+## pktgen
+**ps. 每次重開皆須照以下執行**
+
+```bash=
+cd ~/openNetVM/scripts #jackkuo-Inspiron-3670
+```
+先關閉網卡，然後前面onvm設定動作要再做一次
+```bash=
+sudo ifconfig enp1s0 down
+./setup_environment.sh
 ```
 
-The current OpenNetVM version is 20.10. Please see our [release](docs/Releases.md) document for more information.
-
-About
---
-openNetVM is a high performance NFV platform based on [DPDK][dpdk] and [Docker][docker] containers.  openNetVM provides a flexible framework for deploying network functions and interconnecting them to build service chains.
-
-openNetVM is an open source version of the NetVM platform described in our [NSDI 2014][nsdi14] and [HotMiddlebox 2016][hotmiddlebox16] papers, released under the [BSD][license] license.  
-
-The [develop][dev] branch tracks experimental builds (active development) whereas the [master][mast] branch tracks verified stable releases.  Please read our [releases][rels] document for more information about our releases and release cycle.
-
-You can find information about research projects building on [OpenNetVM][onvm] at the [UCR/GW SDNFV project site][sdnfv]. OpenNetVM is supported in part by NSF grants CNS-1422362 and CNS-1522546.
-
-Installing
---
-To install openNetVM, please see the [openNetVM Installation][install] guide for a thorough walkthrough.
-
-Using openNetVM
---
-openNetVM comes with several sample network functions.  To get started with some examples, please see the [Example Uses][examples] guide
-
-Creating NFs
---
-The [NF Development][nfs] guide will provide what you need to start creating your own NFs.
-
-Dockerize NFs
---
-NFs can be run inside docker containers, with the NF being automatically or hand started. For more informations, see our [Docker guide][docker-nf].
-
-TCP Stack
---
-openNetVM can run mTCP applications as NFs. For more information, visit [mTCP][mtcp].
-
-Citing OpenNetVM
---
-If you use OpenNetVM in your work, please cite our paper:
+安裝相關位置 及 安裝指令
+```bash=
+cd ~/openNetVM/tools/Pktgen/pktgen-dpdk #jackkuo-Inspiron-3670
 ```
-@inproceedings{zhang_opennetvm:_2016,
-	title = {{OpenNetVM}: {A} {Platform} for {High} {Performance} {Network} {Service} {Chains}},
-	booktitle = {Proceedings of the 2016 {ACM} {SIGCOMM} {Workshop} on {Hot} {Topics} in {Middleboxes} and {Network} {Function} {Virtualization}},
-	publisher = {ACM},
-	author = {Zhang, Wei and Liu, Guyue and Zhang, Wenhui and Shah, Neel and Lopreiato, Phillip and Todeschi, Gregoire and Ramakrishnan, K.K. and Wood, Timothy},
-	month = aug,
-	year = {2016},
-}
+```bash=
+make
+```
+設定網卡mac & 查看之檔案位置
+```bash=
+~/openNetVM/tools/Pktgen/openNetVM-Scripts/pktgen-config.lua #jackkuo-Inspiron-3670
+```
+```bash=
+nano pktgen-config.lua
+```
+修改成以下範例
+```lua=
+pktgen.set_mac("0", "src", "3c:7c:3f:4b:76:e9"); --jackkuo-Inspiron-3670
+pktgen.set_mac("0", "dst", "4c:ed:fb:92:c4:13"); --canlab-worker2
+
+pktgen.set("all", "count", 100000000000); --可自行調整每次送的封包量
+pktgen.set("all", "rate", 50); --可自行調整網卡發送速率
+```
+更改幾行code (0xff 改 0xf)
+```bash=
+cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
+```
+```bash=
+nano run-pktgen.sh
+```
+```lua=
+# Pktgen has to be started from pktgen-dpdk/
+if [ "$PORT_NUM"  -eq "2" ]; then
+    (cd "$PKTGEN_HOME" && sudo "$PKTGEN_BUILD" -c 0xf -n 3 -- -p 0x3 "$PORT_MASK" -P -m "[1:2].0, [3:4].1>
+elif [ "$PORT_NUM" -eq "1" ]; then
+    (cd "$PKTGEN_HOME" && sudo "$PKTGEN_BUILD" -c 0xf -n 3 -- -p 0x1 "$PORT_MASK" -P -m "[1:2].0" -f "$PK>
+else
+    echo "Helper script only supports 1 or 2 ports"
+    exit 0
+fi
+
+echo "Pktgen done"
+
+```
+開始打封包
+```bash=
+cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
+```
+```bash=
+./run-pktgen.sh 1 #傳到 NF1
+```
+```bash=
+str #開始送封包
+stp #停止送封包
+
+set all rate 30% #調整封包rate
+
+seq 0 all 4c:ed:fb:92:c4:13 3c:7c:3f:4b:76:e9 10.11.1.17 10.11.1.16/32 1234 1234 ipv4 udp 0 64 #使用seq發送不同種類封包
+
+set all seq_cnt 2 #設定seq總數量
 ```
 
-_Please let us know if you use OpenNetVM in your research by [emailing us](mailto:timwood@gwu.edu) or completing this [short survey](https://goo.gl/forms/oxcnGO45Kxq1Zyyi2)._
+# 俊甫程式使用
+須掛載俊甫的.patch
+並修改對應的.env
+```bash
+# logging level
+LOGGING_LEVEL = "DEBUG"
 
+# save path
+SAVE_USER = "jackkuo"
 
+# trace tool script:
+# ```
+# #!/bin/bash
+# sudo /home/jackkuo/Documents/GitHub/dynamorio/bin64/drrun -root /home/jackkuo/Documents/GitHub/dynamorio -c /home/jackkuo/Documents/GitHub/dynamorio/canlab/build/libtrace_target_func_usage.so -- $@
+# ```
 
+TRACE_TOOL = "/home/jackkuo/bin/onvmtrace"
 
+# openNetVM server init script:
+ONVM_SERVER = "$ONVM_HOME/onvm/go.sh -k 1 -n 0xFF0 -s web -c -m 0,1,2,3 -p 8080"
+ONVM_PORT = "8080"
 
-[onvm]: http://sdnfv.github.io/onvm/
-[sdnfv]: http://sdnfv.github.io/
-[license]: LICENSE
-[dpdk]: http://dpdk.org
-[docker]: https://www.docker.com/
-[nsdi14]: http://faculty.cs.gwu.edu/timwood/papers/14-NSDI-netvm.pdf
-[hotmiddlebox16]: http://faculty.cs.gwu.edu/timwood/papers/16-HotMiddlebox-onvm.pdf
-[install]: docs/Install.md
-[examples]: docs/Examples.md
-[nfs]: docs/NF_Dev.md
-[docker-nf]: docs/Docker.md
-[dev]: https://github.com/sdnfv/openNetVM/tree/develop
-[mast]: https://github.com/sdnfv/openNetVM/tree/master
-[rels]: docs/Releases.md
-[mtcp]: https://github.com/eunyoung14/mtcp
+# ref: https://github.com/opcm/pcm
+PCM_SERVER = "/home/jackkuo/Documents/pcm/pcm-sensor-server.x"
+
+# env variables
+ENV = "
+ONVM_HOME=/home/jackkuo/openNetVM,
+RTE_SDK=/home/jackkuo/openNetVM/dpdk,
+RTE_TARGET=x86_64-native-linuxapp-gcc,
+ONVM_NUM_HUGEPAGES=1024,
+ONVM_NIC_PCI=0000:04:00.0
+"
+
+# Trace NF
+ TRACE = false
+```
+## collector.py
+```bash=
+
+sudo python3 collector.py tcp/bs_8/fw_3/var_1 -trace
+```
+
+## trace2Json.py
+```bash=
+python3 trace2Json.py tcp/bs_8/fw_3/var_1
+```
+## pre_process.py
+```bash=
+python3 pre_process.py tcp/bs_8/fw_3/var_1
+```
+## gen_training_data.py
+```bash=
+python3 gen_training_data.py
+```
