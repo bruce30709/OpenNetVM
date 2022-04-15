@@ -91,5 +91,3 @@ exec "$BINARY" $DPDK_ARGS -- $ONVM_ARGS -- "$@" &
 echo $! > "NF$service""_pid".txt
 cgclassify -g cpu::"NF$service" `cat "NF$service""_pid".txt`
 #cgexec -g cpu:"NF$service" "$BINARY" $DPDK_ARGS -- $ONVM_ARGS -- "$@" &
-
-aaa
