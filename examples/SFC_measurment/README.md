@@ -12,4 +12,6 @@ make
 ```
 Usage
 --
+```
 ./go.sh my_service_number -d dst_service_number
+```
