@@ -39,8 +39,7 @@ make
 cd ..
 cd examples
 make
-#如果要跑我程式 要加入下面這行
-sudo chmod -R 777 .
+sudo chmod -R 777 . #如果要跑我的模擬程式，要加入這行
 cd ..
 ```
 開啟onvm
@@ -76,8 +75,10 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 ```
 NF_router
 別人寫的 NF ，參考 https://github.com/bruce30709/openNetVM/tree/master/examples/nf_router  
-```
+```bash=
 ./go.sh 1 -f route.conf #記得改 route.conf 內的內容(加上 IP 繞送規則)
+sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf  
+
 ```
 ## pktgen
 > **⚠ 提醒:** 
@@ -147,13 +148,13 @@ cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
 str #開始送封包
 stp #停止送封包
 
-set all rate 30% #調整封包 rate 為 30%
+set all rate 30 #調整封包 rate 為 30%
 
 seq 0 all 4c:ed:fb:92:c4:13 3c:7c:3f:4b:76:e9 10.11.1.17 10.11.1.16/32 1234 1234 ipv4 udp 0 64 #使用 seq 設定發送不同種類封包
 
 set all seq_cnt 2 #設定seq總數量
 
-script PATH_TO_YOUR_SCRIPT #上面2句 seq 指令也可以使用 script 自動填入
+script PATH_TO_YOUR_SCRIPT #上面2句 seq 指令也可以使用 script 自動填入(我放在 jackkuo-Inspiron-3670 這台電腦/openNetVM/tools/Pktgen/openNetVM-Scripts 目錄內)
 
 page seq #前往seq page查看
 
