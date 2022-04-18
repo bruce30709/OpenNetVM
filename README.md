@@ -26,7 +26,7 @@ lspci | grep AQC
 ```
 填入正確的pci port
 ```bash=
-export ONVM_NIC_PCI="xx:xx.x" #填入上面查到的網卡PCI port
+export ONVM_NIC_PCI="xx:xx.x" #填入上面查到的網卡 PCI port
 source ~/.bashrc
 sudo sh -c "echo 0 > /proc/sys/kernel/randomize_va_space"
 cd scripts
@@ -48,7 +48,7 @@ cd ..
 ./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
 ```
 ## NF
-開啟NF指令(以forward為例) & NF所在位置
+開啟NF指令(以forward為例) & NF 所在位置
 ```bash=
 cd ~/openNetVM/examples/simple_forward #canlab-worker2
 ```
@@ -63,7 +63,15 @@ busy_forward
 ```bash=
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
-sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數 (pro)
+sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就算只想當 simple_forward 也必須加上 -t 0 (pro)
+
+```
+SFC_measurement
+我自己寫的量測 lantency 和 throughput 的NF
+```bash=
+./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
+
+sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 ```
 ## pktgen
@@ -100,7 +108,7 @@ pktgen.set_mac("0", "src", "3c:7c:3f:4b:76:e9"); --jackkuo-Inspiron-3670
 pktgen.set_mac("0", "dst", "4c:ed:fb:92:c4:13"); --canlab-worker2
 
 pktgen.set("all", "count", 100000000000); --可自行調整每次送的封包量，建議設個非常大的數字
-pktgen.set("all", "rate", 100); --可自行調整網卡發送速率，建議設100進去後再用set指令調整
+pktgen.set("all", "rate", 100); --可自行調整網卡發送速率，建議設 100 開啟程式後再用 set 指令調整
 ```
 更改幾行code (0xff 改 0xf)，程式原本就沒寫好吧，改就對了
 ```bash=
@@ -134,13 +142,13 @@ cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
 str #開始送封包
 stp #停止送封包
 
-set all rate 30% #調整封包rate為30%
+set all rate 30% #調整封包 rate 為 30%
 
-seq 0 all 4c:ed:fb:92:c4:13 3c:7c:3f:4b:76:e9 10.11.1.17 10.11.1.16/32 1234 1234 ipv4 udp 0 64 #使用seq發送不同種類封包
+seq 0 all 4c:ed:fb:92:c4:13 3c:7c:3f:4b:76:e9 10.11.1.17 10.11.1.16/32 1234 1234 ipv4 udp 0 64 #使用 seq 設定發送不同種類封包
 
 set all seq_cnt 2 #設定seq總數量
 
-script PATH_TO_YOUR_SCRIPT #上面2句指令也可以使用script自動填入
+script PATH_TO_YOUR_SCRIPT #上面2句 seq 指令也可以使用 script 自動填入
 
 page seq #前往seq page查看
 
@@ -150,7 +158,7 @@ page main #回到main page查看
 
 
 # 俊甫程式使用方法
-須掛載俊甫的.patch
+須掛載俊甫的 .patch
 並修改對應的.env，
 參考 https://gitlab.com/nthu_canlab/chun-fu_kuo/experiment/-/tree/master/ONVM
 ```bash
