@@ -4,20 +4,7 @@
 > 需依照 ovnm -> NF -> pktgen 順序執行
 ## onvm
 先調整環境變數
-```bash=
-sudo apt-get install build-essential linux-headers-$(uname -r) git bc
-sudo apt-get install python3
-sudo apt-get install libnuma-dev
-sudo apt-get update
-git clone https://github.com/sdnfv/openNetVM
-cd openNetVM
-###### tags: `研究`
-# opennetvm 安裝 及 用法
-> **⚠ 提醒:** 
-> 需依照 ovnm -> NF -> pktgen 順序執行
-## onvm
-先調整環境變數
-```bash=
+```bash
 sudo apt-get install build-essential linux-headers-$(uname -r) git bc
 sudo apt-get install python3
 sudo apt-get install libnuma-dev
@@ -34,11 +21,11 @@ echo export RTE_TARGET=x86_64-native-linuxapp-gcc  >> ~/.bashrc
 echo export ONVM_NUM_HUGEPAGES=1024 >> ~/.bashrc
 ```
 查詢網卡pci port
-```bash=
+```bash
 lspci | grep AQC
 ```
 填入正確的pci port
-```bash=
+```bash
 export ONVM_NIC_PCI="xx:xx.x" #填入上面查到的網卡 PCI port
 source ~/.bashrc # 上面一句指令也可以 >> ~/.bashrc ，以後就不用再查找了
 sudo sh -c "echo 0 > /proc/sys/kernel/randomize_va_space"
@@ -56,23 +43,23 @@ sudo chmod -R 777 . #如果要跑我的模擬程式，要加入這行
 cd ..
 ```
 開啟onvm
-```bash=
+```bash
 ./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
 ```
 ## NF
 開啟NF指令(以forward為例) & NF 所在位置
-```bash=
+```bash
 cd ~/openNetVM/examples/simple_forward #canlab-worker2
 ```
 simple_forward
-```bash=
+```bash
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 ```
 busy_forward
-```bash=
+```bash
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就算只想當 simple_forward 也必須加上 -t 0 (pro)
@@ -80,7 +67,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就�
 ```
 SFC_measurement
 我自己寫的量測 lantency 和 throughput 的NF，參考 [examples/SFC_measurment](examples/SFC_measurment)  
-```bash=
+```bash
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
@@ -88,7 +75,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 ```
 NF_router
 別人寫的 NF ，參考 [examples/nf_router](examples/nf_router)  
-```bash=
+```bash
 ./go.sh 1 -f route.conf #記得改 route.conf 內的內容(加上 IP 繞送規則)
 sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf  
 
@@ -98,31 +85,31 @@ sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf
 > 每次重開都要執行一遍
 
 
-```bash=
+```bash
 cd ~/openNetVM/scripts #jackkuo-Inspiron-3670
 ```
 先關閉網卡，然後前面onvm設定動作要再做一次
-```bash=
+```bash
 sudo ifconfig enp1s0 down
 ./setup_environment.sh
 ```
 
 安裝相關位置 及 安裝指令
-```bash=
+```bash
 cd ~/openNetVM/tools/Pktgen/pktgen-dpdk #jackkuo-Inspiron-3670
 ```
-```bash=
+```bash
 make
 ```
 設定網卡mac & 查看之檔案位置
-```bash=
+```bash
 ~/openNetVM/tools/Pktgen/openNetVM-Scripts/pktgen-config.lua #jackkuo-Inspiron-3670
 ```
-```bash=
+```bash
 nano pktgen-config.lua
 ```
 修改成以下範例
-```lua=
+```lua
 pktgen.set_mac("0", "src", "3c:7c:3f:4b:76:e9"); --jackkuo-Inspiron-3670
 pktgen.set_mac("0", "dst", "4c:ed:fb:92:c4:13"); --canlab-worker2
 
@@ -130,13 +117,13 @@ pktgen.set("all", "count", 100000000000); --可自行調整每次送的封包量
 pktgen.set("all", "rate", 100); --可自行調整網卡發送速率，建議設 100 開啟程式後再用 set 指令調整
 ```
 更改幾行code (0xff 改 0xf)，程式原本就沒寫好吧，改就對了
-```bash=
+```bash
 cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
 ```
-```bash=
+```bash
 nano run-pktgen.sh
 ```
-```lua=
+```lua
 # Pktgen has to be started from pktgen-dpdk/
 if [ "$PORT_NUM"  -eq "2" ]; then
     (cd "$PKTGEN_HOME" && sudo "$PKTGEN_BUILD" -c 0xf -n 3 -- -p 0x3 "$PORT_MASK" -P -m "[1:2].0, [3:4].1>
@@ -151,13 +138,13 @@ echo "Pktgen done"
 
 ```
 開始打封包
-```bash=
+```bash
 cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
 ```
-```bash=
+```bash
 ./run-pktgen.sh 1 #傳到你綁定的portt
 ```
-```bash=
+```bash
 str #開始送封包
 stp #停止送封包
 
@@ -211,19 +198,19 @@ ONVM_NIC_PCI=0000:04:00.0
 ```
 
 ## collector.py
-```bash=
+```bash
 sudo python3 collector.py tcp/bs_8/fw_3/var_1 -trace
 ```
 
 ## trace2Json.py
-```bash=
+```bash
 python3 trace2Json.py tcp/bs_8/fw_3/var_1
 ```
 ## pre_process.py
-```bash=
+```bash
 python3 pre_process.py tcp/bs_8/fw_3/var_1 #非必要
 ```
 ## gen_training_data.py
-```bash=
+```bash
 python3 gen_training_data.py
 ```
