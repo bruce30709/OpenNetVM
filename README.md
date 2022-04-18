@@ -66,7 +66,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就�
 
 ```
 SFC_measurement
-我自己寫的量測 lantency 和 throughput 的NF，參考 examples/SFC_measurment  
+我自己寫的量測 lantency 和 throughput 的NF，參考 [examples/SFC_measurment](examples/SFC_measurment)  
 ```bash=
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
@@ -74,7 +74,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 ```
 NF_router
-別人寫的 NF ，參考 examples/nf_router  
+別人寫的 NF ，參考 [examples/nf_router](examples/nf_router)  
 ```bash=
 ./go.sh 1 -f route.conf #記得改 route.conf 內的內容(加上 IP 繞送規則)
 sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf  
