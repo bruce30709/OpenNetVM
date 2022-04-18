@@ -155,7 +155,7 @@ echo "Pktgen done"
 cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
 ```
 ```bash=
-./run-pktgen.sh 1 #傳到 NF1
+./run-pktgen.sh 1 #傳到你綁定的portt
 ```
 ```bash=
 str #開始送封包
