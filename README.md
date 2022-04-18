@@ -227,38 +227,3 @@ python3 pre_process.py tcp/bs_8/fw_3/var_1 #非必要
 ```bash=
 python3 gen_training_data.py
 ```
-
-git submodule sync
-git submodule update --init
-echo export ONVM_HOME=$(pwd) >> ~/.bashrc
-cd dpdk
-echo export RTE_SDK=$(pwd) >> ~/.bashrc
-echo export RTE_TARGET=x86_64-native-linuxapp-gcc  >> ~/.bashrc
-echo export ONVM_NUM_HUGEPAGES=1024 >> ~/.bashrc
-```
-查詢網卡pci port
-```bash=
-lspci | grep AQC
-```
-填入正確的pci port
-```bash=
-export ONVM_NIC_PCI="xx:xx.x" #填入上面查到的網卡 PCI port
-source ~/.bashrc
-sudo sh -c "echo 0 > /proc/sys/kernel/randomize_va_space"
-cd scripts
-./install.sh #會滿久的 完成後確認有無成功綁定網卡在DPDK上
-./setup_environment.sh #可檢查是否綁定成功，此行每次重開皆要重新執行
-
-cd ..
-cd onvm
-make
-cd ..
-cd examples
-make
-sudo chmod -R 777 . #如果要跑我的模擬程式，要加入這行
-cd ..
-```
-開啟onvm
-```bash=
-./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
-```
