@@ -67,12 +67,17 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就�
 
 ```
 SFC_measurement
-我自己寫的量測 lantency 和 throughput 的NF
+我自己寫的量測 lantency 和 throughput 的NF，參考 https://github.com/bruce30709/openNetVM/tree/master/examples/SFC_measurment  
 ```bash=
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
+```
+NF_router
+別人寫的 NF ，參考 https://github.com/bruce30709/openNetVM/tree/master/examples/nf_router  
+```
+./go.sh 1 -f route.conf #記得改 route.conf 內的內容(加上 IP 繞送規則)
 ```
 ## pktgen
 > **⚠ 提醒:** 
