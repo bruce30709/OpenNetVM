@@ -12,6 +12,7 @@ make
 ```
 Usage
 --
+**⚠ Warning:** This NF should deploy at the first of circuit SFC
 ```
 ./go.sh my_service_number -d dst_service_number
 ```
