@@ -11,7 +11,7 @@ sudo apt-get install libnuma-dev
 sudo apt-get update
 git clone https://github.com/sdnfv/openNetVM
 cd openNetVM
-git checkout master
+git checkout 61ce33a4ca6d3d7662bb091bdd8bcfc9a61c792d
 git submodule sync
 git submodule update --init
 echo export ONVM_HOME=$(pwd) >> ~/.bashrc
