@@ -1,7 +1,6 @@
 SFC measurement
 ==
-Edit by https://github.com/bruce30709  
-Modify form load generator & speed tester.  
+Edit by https://github.com/bruce30709 and is modify from load generator & speed tester.  
 This NF marked imcoming packet with timestamps, and it measures latency and throughput when packets it marked are returned to itself.  
 If you want to get lantency infomation, send packets back to itself.
 
