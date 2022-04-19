@@ -1,7 +1,7 @@
 ###### tags: `研究`
 # opennetvm 安裝 及 用法
 > **⚠ 提醒:** 
-> 需依照 ovnm -> NF -> pktgen 順序執行
+> 需依照 ovnm ➡ NF ➡ pktgen 順序執行
 ## onvm
 先調整環境變數
 ```bash
@@ -46,20 +46,26 @@ cd ..
 ```bash
 ./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
 ```
-## NF
-開啟NF指令(以forward為例) & NF 所在位置
+## NFs（在）
+NF 所在位置
 ```bash
-cd ~/openNetVM/examples/simple_forward #canlab-worker2
+cd ~/openNetVM/examples/ #canlab-worker2
 ```
 simple_forward
 ```bash
+cd simple_forward
+
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 ```
+
+
 busy_forward
 ```bash
+cd busy_forward
+
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就算只想當 simple_forward 也必須加上 -t 0 (pro)
@@ -68,16 +74,21 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就�
 SFC_measurement
 我自己寫的量測 lantency 和 throughput 的NF，參考 [examples/SFC_measurment](examples/SFC_measurment)  
 ```bash
+cd SFC_measurment #當初命名少一個e就將就用 XD
+
 ./go.sh 1 -d 2 #從 NF1 傳到 NF2 (basic)
 
 sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 ```
 NF_router
-別人寫的 NF ，參考 [examples/nf_router](examples/nf_router)  
+別人寫的 NF，做封包分流 ，參考 [examples/nf_router](examples/nf_router)  
 ```bash
+cd NF_router
+
 ./go.sh 1 -f route.conf #記得改 route.conf 內的內容(加上 IP 繞送規則)
-sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf  
+
+sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf # 加入參數 (pro)  
 
 ```
 ## pktgen
@@ -103,7 +114,7 @@ make
 ```
 設定網卡mac & 查看之檔案位置
 ```bash
-~/openNetVM/tools/Pktgen/openNetVM-Scripts/pktgen-config.lua #jackkuo-Inspiron-3670
+cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts/ #jackkuo-Inspiron-3670
 ```
 ```bash
 nano pktgen-config.lua
@@ -154,16 +165,16 @@ seq 0 all 4c:ed:fb:92:c4:13 3c:7c:3f:4b:76:e9 10.11.1.17 10.11.1.16/32 1234 1234
 
 set all seq_cnt 2 #設定seq總數量
 
-script PATH_TO_YOUR_SCRIPT #上面2句 seq 指令也可以使用 script 自動填入(我放在 jackkuo-Inspiron-3670 這台電腦/openNetVM/tools/Pktgen/openNetVM-Scripts 目錄內)
+script set_seq.lua #上面2句 seq 指令也可以使用 script 自動填入(我放在 jackkuo-Inspiron-3670 這台電腦/openNetVM/tools/Pktgen/openNetVM-Scripts 目錄內)
 
-page seq #前往seq page查看
+page seq #前往 seq page 查看
 
-page main #回到main page查看
+page main #回到 main page 查看
 
 ```
 
 
-# 俊甫程式使用方法
+# 俊甫程式使用方法 (簡易操作)
 須掛載俊甫的 .patch
 並修改對應的.env，
 參考 https://gitlab.com/nthu_canlab/chun-fu_kuo/experiment/-/tree/master/ONVM
