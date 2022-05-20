@@ -45,7 +45,7 @@ cd ..
 ```bash
 ./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
 ```
-## NFs（在）
+## NFs
 NF 所在位置
 ```bash
 cd ~/openNetVM/examples/ #canlab-worker2
