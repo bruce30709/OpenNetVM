@@ -9,7 +9,7 @@ sudo apt-get install build-essential linux-headers-$(uname -r) git bc
 sudo apt-get install python3
 sudo apt-get install libnuma-dev
 sudo apt-get update
-git clone https://github.com/sdnfv/openNetVM
+git clone https://gitlab.com/nthu_canlab/cheng-yu-lee/openNetVM
 cd openNetVM
 git checkout 61ce33a4ca6d3d7662bb091bdd8bcfc9a61c792d
 git submodule sync
