@@ -9,8 +9,9 @@ sudo apt-get install build-essential linux-headers-$(uname -r) git bc
 sudo apt-get install python3
 sudo apt-get install libnuma-dev
 sudo apt-get update
-git clone https://github.com/bruce30709/openNetVM
+git clone https://github.com/sdnfv/openNetVM
 cd openNetVM
+git checkout 61ce33a4ca6d3d7662bb091bdd8bcfc9a61c792d
 git submodule sync
 git submodule update --init
 echo export ONVM_HOME=$(pwd) >> ~/.bashrc
@@ -45,7 +46,7 @@ cd ..
 ```bash
 ./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
 ```
-## NFs
+## NFs（在）
 NF 所在位置
 ```bash
 cd ~/openNetVM/examples/ #canlab-worker2
@@ -71,7 +72,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就�
 
 ```
 SFC_measurement
-我自己寫的量測 lantency 和 throughput 的NF，參考 [examples/SFC_measurment](examples/SFC_measurment)  
+我自己寫的量測 lantency 和 throughput 的NF，參考 [SFC_measurment](examples/SFC_measurment)  
 ```bash
 cd SFC_measurment #當初命名少一個e就將就用 XD
 
@@ -81,7 +82,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 ```
 NF_router
-別人寫的 NF，做封包分流 ，參考 [examples/nf_router](examples/nf_router)  
+別人寫的 NF，做封包分流 ，參考 [nf_router](examples/nf_router)  
 ```bash
 cd NF_router
 
