@@ -10,8 +10,8 @@ sudo apt-get install python3
 sudo apt-get install libnuma-dev
 sudo apt-get update
 git clone https://gitlab.com/nthu_canlab/cheng-yu-lee/openNetVM
+# 需要一次性驗證
 cd openNetVM
-git checkout 61ce33a4ca6d3d7662bb091bdd8bcfc9a61c792d
 git submodule sync
 git submodule update --init
 echo export ONVM_HOME=$(pwd) >> ~/.bashrc
@@ -20,6 +20,9 @@ echo export RTE_SDK=$(pwd) >> ~/.bashrc
 echo export RTE_TARGET=x86_64-native-linuxapp-gcc  >> ~/.bashrc
 echo export ONVM_NUM_HUGEPAGES=1024 >> ~/.bashrc
 ```
+> **⚠ 提醒:** 
+> github 一次性驗證請參考 https://www.astralweb.com.tw/github-how-to-update-the-repository-through-two-stage-verification/  
+
 查詢網卡pci port
 ```bash
 lspci | grep AQC
@@ -46,7 +49,7 @@ cd ..
 ```bash
 ./onvm/go.sh  -k 1 -n 0xFF0 -s stdout -c -m 0,1,2,3
 ```
-## NFs（在）
+## NFs
 NF 所在位置
 ```bash
 cd ~/openNetVM/examples/ #canlab-worker2
