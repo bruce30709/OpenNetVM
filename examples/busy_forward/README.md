@@ -1,4 +1,9 @@
-Simple Forward
+busy_forward
+==
+Edit by https://github.com/bruce30709 and is modify from simple forward.  
+This NF do configuable floating point opeartions with -t argument.
+
+busy Forward
 ==
 Example NF that forwards packets to a specific destination.
 
@@ -23,6 +28,7 @@ App Specific Arguments
 --
   - `-d <dst>`: destination service ID to foward to
   - `-p <print_delay>`: number of packets between each print, e.g. `-p 1` prints every packets.
+  - `-t <times>`: number of iteration the floating point operations, e.g.`-t 5 ` means 5 * 1000 times floating point operations.
 
 Config File Support
 --
