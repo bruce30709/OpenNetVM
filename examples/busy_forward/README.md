@@ -28,7 +28,7 @@ App Specific Arguments
 --
   - `-d <dst>`: destination service ID to foward to
   - `-p <print_delay>`: number of packets between each print, e.g. `-p 1` prints every packets.
-  - `-t <times>`: number of iteration the floating point operations, e.g.`-t 5 ` means 5 * 1000 times floating point operations.
+  - `-t <times>`: number of iteration the floating point operations, e.g. `-t 5` means 5 * 1000 times floating point operations.
 
 Config File Support
 --
