@@ -66,6 +66,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 # 加入參數 (pro)
 
 
 busy_forward
+俊甫寫的 NF，參考 [busy_forward](examples/busy_forward)
 ```bash
 cd busy_forward
 
@@ -75,7 +76,7 @@ sudo ./go.sh -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -d 2 -t 20 # 加入參數，就�
 
 ```
 SFC_measurement
-我自己寫的量測 lantency 和 throughput 的NF，參考 [SFC_measurment](examples/SFC_measurment)  
+我自己寫的量測 lantency 和 throughput 的 NF，參考 [SFC_measurment](examples/SFC_measurment)  
 ```bash
 cd SFC_measurment #當初命名少一個e就將就用 XD
 
