@@ -101,7 +101,7 @@ sudo ./go.sh nf_router -l 6 -n 3 -- -m 6 -n 1 -r 1 -s -- -f route.conf # 加入�
 
 
 ```bash
-cd ~/openNetVM/scripts #jackkuo-Inspiron-3670
+cd ~/openNetVM/scripts #packet generator1
 ```
 先關閉網卡，然後前面onvm設定動作要再做一次
 ```bash
@@ -111,14 +111,14 @@ sudo ifconfig enp1s0 down
 
 安裝相關位置 及 安裝指令
 ```bash
-cd ~/openNetVM/tools/Pktgen/pktgen-dpdk #jackkuo-Inspiron-3670
+cd ~/openNetVM/tools/Pktgen/pktgen-dpdk #packet generator1
 ```
 ```bash
 make
 ```
 設定網卡mac & 查看之檔案位置
 ```bash
-cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts/ #jackkuo-Inspiron-3670
+cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts/ #packet generator1
 ```
 ```bash
 nano pktgen-config.lua
@@ -133,7 +133,7 @@ pktgen.set("all", "rate", 100); --可自行調整網卡發送速率，建議設 
 ```
 更改幾行code (0xff 改 0xf)，程式原本就沒寫好吧，改就對了
 ```bash
-cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
+cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #packet generator1
 ```
 ```bash
 nano run-pktgen.sh
@@ -154,7 +154,7 @@ echo "Pktgen done"
 ```
 開始打封包
 ```bash
-cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #jackkuo-Inspiron-3670
+cd ~/openNetVM/tools/Pktgen/openNetVM-Scripts #packet generator1
 ```
 ```bash
 ./run-pktgen.sh 1 #傳到你綁定的portt
