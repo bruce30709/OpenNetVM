@@ -181,7 +181,6 @@ page main #回到 main page 查看
 # 俊甫程式使用方法 (簡易操作)
 須掛載俊甫的 .patch
 並修改對應的.env，
-參考 https://gitlab.com/nthu_canlab/chun-fu_kuo/experiment/-/tree/master/ONVM
 ```bash
 # logging level
 LOGGING_LEVEL = "DEBUG"
