@@ -1,5 +1,5 @@
 ###### tags: `研究`
-# opennetvm 安裝 及 用法
+# OpennNetVM 安裝 及 用法
 > **⚠ 提醒:** 
 > 需依照 ovnm ➡ NF ➡ pktgen 順序執行
 ## onvm
