@@ -125,8 +125,8 @@ nano pktgen-config.lua
 ```
 修改成以下範例
 ```lua
-pktgen.set_mac("0", "src", "3c:7c:3f:4b:76:e9"); --packet generator1
-pktgen.set_mac("0", "dst", "4c:ed:fb:92:c4:13"); --packet generator2
+pktgen.set_mac("0", "src", "AA:BB:CC:DD:EE:FF"); --packet generator1
+pktgen.set_mac("0", "dst", "GG:HH:II:JJ:KK:LL"); --packet generator2
 
 pktgen.set("all", "count", 100000000000); --可自行調整每次送的封包量，建議設個非常大的數字
 pktgen.set("all", "rate", 100); --可自行調整網卡發送速率，建議設 100 開啟程式後再用 set 指令調整
@@ -165,7 +165,7 @@ stp #停止送封包
 
 set all rate 30 #調整封包 rate 為 30%
 
-seq 0 all 4c:ed:fb:92:c4:13 3c:7c:3f:4b:76:e9 10.11.1.17 10.11.1.16/32 1234 1234 ipv4 udp 0 64 #使用 seq 設定發送不同種類封包
+seq 0 all GG:HH:II:JJ:KK:LL AA:BB:CC:DD:EE:FF 10.11.1.17 10.11.1.16/32 1234 1234 ipv4 udp 0 64 #使用 seq 設定發送不同種類封包
 
 set all seq_cnt 2 #設定seq總數量
 
