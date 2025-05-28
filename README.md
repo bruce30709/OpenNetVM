@@ -177,57 +177,6 @@ page main #回到 main page 查看
 
 ```
 
-
-# 俊甫程式使用方法 (簡易操作)
-須掛載俊甫的 .patch
-並修改對應的.env，
-```bash
-# logging level
-LOGGING_LEVEL = "DEBUG"
-
-# save path
-SAVE_USER = "jackkuo"
-
-
-TRACE_TOOL = "/home/jackkuo/bin/onvmtrace"
-
-# openNetVM server init script:
-ONVM_SERVER = "$ONVM_HOME/onvm/go.sh -k 1 -n 0xFF0 -s web -c -m 0,1,2,3 -p 8080"
-ONVM_PORT = "8080"
-
-# ref: https://github.com/opcm/pcm
-PCM_SERVER = "/home/jackkuo/Documents/pcm/pcm-sensor-server.x"
-
-# env variables
-ENV = "
-ONVM_HOME=/home/jackkuo/openNetVM,
-RTE_SDK=/home/jackkuo/openNetVM/dpdk,
-RTE_TARGET=x86_64-native-linuxapp-gcc,
-ONVM_NUM_HUGEPAGES=1024,
-ONVM_NIC_PCI=0000:04:00.0
-"
-
-# Trace NF
- TRACE = false
-```
-
-## collector.py
-```bash
-sudo python3 collector.py tcp/bs_8/fw_3/var_1 -trace
-```
-
-## trace2Json.py
-```bash
-python3 trace2Json.py tcp/bs_8/fw_3/var_1
-```
-## pre_process.py
-```bash
-python3 pre_process.py tcp/bs_8/fw_3/var_1 #非必要
-```
-## gen_training_data.py
-```bash
-python3 gen_training_data.py
-```
 ## Reference
 This project is based on and refers to openNetVM, a high performance NFV platform developed by GW and UCR.
 For more details, please visit the official openNetVM repository: https://github.com/sdnfv/openNetVM
